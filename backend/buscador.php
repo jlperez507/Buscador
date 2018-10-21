@@ -1,37 +1,36 @@
 <?php
 try {
-header('Content-Type: application/json');
+  header('Content-Type: application/json');
 
-$opcion = $_POST["opcion"];
+  $opcion = $_POST["opcion"];
 
-if ($opcion == 1){//opcion 1 se buscara todos los items
-  mostrarTodos();
-}else if ($opcion == 2){//opcion 2 es para determinar que la busqueda sera con filtro
-  $precio = $_POST["precio"];
-  $precioini = explode(";", $precio)[0];
-  $preciofin = explode(";", $precio)[1];
-  $tipo = $_POST["tipo"];
-  $ciudad = $_POST["ciudad"];
-
-  mostarFiltros($precioini, $preciofin, $tipo, $ciudad);
-}else if ($opcion == 3){//opcion 3 es para buscar las ciudades
-  buscarCiudades();
-}else if ($opcion == 4){//opcion 4 es para buscar los tipos de propiedades.
-  buscarTipos();
-}
+  if ($opcion == 1){ //opcion 1 se buscara todos los items
+    mostrarTodos();
+  }else if ($opcion == 2){ //opcion 2 es para determinar que la busqueda sera con filtro
+    $precio = $_POST["precio"];
+    $precioini = explode(";", $precio)[0];
+    $preciofin = explode(";", $precio)[1];
+    $tipo = $_POST["tipo"];
+    $ciudad = $_POST["ciudad"];
+    mostarFiltros($precioini, $preciofin, $tipo, $ciudad);
+  }else if ($opcion == 3){ //opcion 3 es para buscar las ciudades
+    buscarCiudades();
+  }else if ($opcion == 4){ //opcion 4 es para buscar los tipos de propiedades.
+    buscarTipos();
+  }
 } catch (Exception $ex) {
    $data =  $ex->getMessage();
    echo  $data;
 }
 
+//funcion que busca todas las propiedades.
 function mostrarTodos(){
   $data = file_get_contents("../data-1.json");
   echo $data;
 }
 
+//Funcion que busca las propiedades por los filtros.
 function mostarFiltros($precioini, $preciofin, $tipo, $ciudad){
-try {
-
   $data = file_get_contents("../data-1.json");
   $datos = json_decode($data, true);
 
@@ -39,8 +38,8 @@ try {
   {
     $p = str_replace('$', '', $dat["Precio"]);
     $p = str_replace(',', '',$p);
-
     $p = floatval($p);
+
     if ($tipo <> "" && $ciudad <> ""){
       return $p >= $precioini && $p <= $preciofin && $dat["Tipo"] == $tipo  && $dat["Ciudad"] == $ciudad;
     }else if ($tipo <> ""){
@@ -51,14 +50,10 @@ try {
       return $p >= $precioini && $p <= $preciofin;
     }
   });
-
   echo json_encode($resultado);
-} catch (Exception $ex) {
-   echo  $ex->getMessage();
 }
 
-}
-
+//Busca el listado de ciudades.
 function buscarCiudades(){
   $data = file_get_contents("../data-1.json");
   $datos = json_decode($data, true);
@@ -72,6 +67,7 @@ function buscarCiudades(){
   echo json_encode($ciudad);
 }
 
+//Busca el listado de tipos de propiedades
 function buscarTipos(){
   $data = file_get_contents("../data-1.json");
   $datos = json_decode($data, true);
