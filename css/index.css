@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 video#vidFondo {
     position: fixed;
     min-width: 100%;
@@ -136,9 +140,6 @@ video#vidFondo {
 .precioTexto{
   font-size: 1.3rem;
   color: #ffab40;
-}
-.card-stacked{
-  width: 65%;
 }
 .card-action{
   text-align: right;
