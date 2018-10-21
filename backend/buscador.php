@@ -7,9 +7,13 @@ $opcion = $_POST["opcion"];
 if ($opcion == 1){//opcion 1 se buscara todos los items
   mostrarTodos();
 }else if ($opcion == 2){//opcion 2 es para determinar que la busqueda sera con filtro
-  $precioini = $_POST["precioini"];
-  $preciofin = $_POST["preciofin"];
-  mostarFiltros($precioini, $preciofin);
+  $precio = $_POST["precio"];
+  $precioini = explode(";", $precio)[0];
+  $preciofin = explode(";", $precio)[1];
+  $tipo = $_POST["tipo"];
+  $ciudad = $_POST["ciudad"];
+
+  mostarFiltros($precioini, $preciofin, $tipo, $ciudad);
 }else if ($opcion == 3){//opcion 3 es para buscar las ciudades
   buscarCiudades();
 }else if ($opcion == 4){//opcion 4 es para buscar los tipos de propiedades.
@@ -25,19 +29,27 @@ function mostrarTodos(){
   echo $data;
 }
 
-function mostarFiltros($precioini, $preciofin){
+function mostarFiltros($precioini, $preciofin, $tipo, $ciudad){
 try {
 
   $data = file_get_contents("../data-1.json");
   $datos = json_decode($data, true);
 
-  $resultado = array_filter($datos, function($dat) use ($precioini, $preciofin)
+  $resultado = array_filter($datos, function($dat) use ($precioini, $preciofin, $tipo, $ciudad)
   {
     $p = str_replace('$', '', $dat["Precio"]);
     $p = str_replace(',', '',$p);
 
     $p = floatval($p);
-    return $p >= $precioini && $p <= $preciofin;
+    if ($tipo <> "" && $ciudad <> ""){
+      return $p >= $precioini && $p <= $preciofin && $dat["Tipo"] == $tipo  && $dat["Ciudad"] == $ciudad;
+    }else if ($tipo <> ""){
+      return $p >= $precioini && $p <= $preciofin && $dat["Tipo"] == $tipo;
+    }else if ($ciudad <> ""){
+        return $p >= $precioini && $p <= $preciofin && $dat["Ciudad"] == $ciudad;
+    }else{
+      return $p >= $precioini && $p <= $preciofin;
+    }
   });
 
   echo json_encode($resultado);

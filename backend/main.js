@@ -24,10 +24,10 @@ let formulario = document.getElementById('formulario');
 
 formulario.addEventListener('submit',function (e){
   e.preventDefault();
-  let data = new FormData();
+  let data = new FormData(document.getElementById('formulario'));
   data.append('opcion', '2');
-  data.append('precioini', document.getElementById('rangoPrecio').value.split(';')[0]);
-  data.append('preciofin', document.getElementById('rangoPrecio').value.split(';')[1]);
+  //data.append('precioini', document.getElementById('rangoPrecio').value.split(';')[0]);
+  //data.append('preciofin', document.getElementById('rangoPrecio').value.split(';')[1]);
 
   let url = '../buscador/backend/buscador.php' ;
   fetch(url, {
@@ -79,7 +79,7 @@ window.addEventListener('load', function(){
         let option = document.createElement('option');
         let text = document.createTextNode(resultado[i]);
         option.appendChild(text);
-        option.value = resultado[i];
+        //option.value = resultado[i];
         document.getElementById('selectCiudad').appendChild(option);
       }
    })
@@ -100,7 +100,7 @@ window.addEventListener('load', function(){
          let option = document.createElement('option');
          let text = document.createTextNode(resultado[i]);
          option.appendChild(text);
-         option.value = resultado[i];
+         //option.value = resultado[i];
          document.getElementById('selectTipo').appendChild(option);
        }
     })
